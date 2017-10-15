@@ -76,7 +76,8 @@ int main()
         scanf("%s", StrB);
         Blength = strlen(StrB);
         Bcount();
-        if(allchk() == 1 || partchk() == 1 || changechk() == 1)
+        if(allchk() == 1 || part
+        chk() == 1 || changechk() == 1)
         {
             result++;
         }
