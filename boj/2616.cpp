@@ -1,5 +1,48 @@
 #include <cstdio>
 #include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+int N, M, memo[5][50005], Sum[50005];
+
+int func(int train, int idx)
+{
+    if(train == 3)
+    {
+        return 0;
+    }
+    int &ret = memo[train][idx];
+    if(ret != -1)
+    {
+        return ret;
+    }
+    ret = 0;
+    if(idx + M <= N)
+    {
+        ret = max(ret, func(train + 1, idx + M) + Sum[idx + M] - Sum[idx]);
+    }
+    ret = max(ret, func(train, idx + 1));
+    return ret;
+}
+
+int main()
+{
+    scanf("%d", &N);
+    for(int i = 1; i <= N; i++)
+    {
+        int train;
+        scanf("%d", &train);
+        Sum[i] = Sum[i - 1] + train;
+    }
+    scanf("%d", &M);
+    memset(memo, -1, sizeof memo);
+    printf("%d", func(0, 0));
+}
+
+
+
+#include <cstdio>
+#include <iostream>
 #include <algorithm>
 using namespace std;
 int N, M, memo[5][50005], Sum[50005];
