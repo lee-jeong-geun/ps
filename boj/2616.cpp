@@ -1,3 +1,5 @@
+//재귀
+
 #include <cstdio>
 #include <iostream>
 #include <cstring>
@@ -39,7 +41,7 @@ int main()
     printf("%d", func(0, 0));
 }
 
-
+ //반복
 
 #include <cstdio>
 #include <iostream>
