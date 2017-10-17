@@ -1,3 +1,5 @@
+//처음푼것
+
 #include <cstdio>
 #include <iostream>
 using namespace std;
@@ -40,6 +42,53 @@ int main()
     Num[62] = '!';
     Num[63] = '@';
     Num[64] = '#';
+    int T;
+    scanf("%d", &T);
+    for(int testcase = 0; testcase < T; testcase++)
+    {
+        int flag = 0;
+        scanf("%d", &N);
+        for(int i = 2; i <= 64; i++)
+        {
+            if(chk(N, i) == 1)
+            {
+                flag = 1;
+                break;
+            }
+        }
+        printf("%d\n", flag);
+    }
+}
+
+// 짧게 줄인것
+
+#include <cstdio>
+#include <iostream>
+using namespace std;
+int N;
+char arr[1005];
+
+int chk(int a, int count)
+{
+    int idx = 0;
+    while(a != 0)
+    {
+        arr[idx] = a % count;
+        idx++;
+        a = a / count;
+    }
+    for(int i = 0; i < idx / 2; i++)
+    {
+        if(arr[i] != arr[idx - i - 1])
+        {
+            return 0;
+        }
+    }
+    return 1;
+} 
+
+int main()
+{
     int T;
     scanf("%d", &T);
     for(int testcase = 0; testcase < T; testcase++)
