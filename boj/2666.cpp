@@ -17,23 +17,8 @@ int func(int idx, int l, int r)
         return ret;
     }
     ret = 987654321;
-    if(l == seq[idx] || r == seq[idx])
-    {
-        ret = min(ret, func(idx + 1, l, r));
-    }
-    else if(seq[idx] < l)
-    {
-        ret = min(ret, func(idx, l - 1, r) + 1);
-    }
-    else if(r < seq[idx])
-    {
-        ret = min(ret, func(idx, l, r + 1) + 1);
-    }
-    else if(l < seq[idx] && seq[idx] < r)
-    {
-        ret = min(ret, func(idx, l + 1, r) + 1);
-        ret = min(ret, func(idx, l, r - 1) + 1);
-    }
+    ret = min(ret, func(idx + 1, seq[idx], r) + abs(seq[idx] - l));
+    ret = min(ret, func(idx + 1, l, seq[idx]) + abs(seq[idx] - r));
     return ret;
 }
 
