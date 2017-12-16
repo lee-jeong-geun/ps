@@ -3,8 +3,8 @@
 #include <algorithm>
 using namespace std;
 int N, zone[25][25], result = 987654321;
-int arrA[5] = { 0, 0, 0, 1, -1 }; //버튼 기능 
-int arrB[5] = { 0, 1, -1, 0, 0 }; //구현
+int arrA[5] = { 0, 0, 0, 1, -1 }; // 버튼 기능 
+int arrB[5] = { 0, 1, -1, 0, 0 }; // 구현
 
 // 전구 전부다 off인지 확인
 bool zonechk()
