@@ -4,7 +4,7 @@ using namespace std;
 
 /*
 linked list stack(template)
-
+*/
 template<typename T>
 class stack
 {
@@ -50,11 +50,11 @@ public:
         return _size == 0;
     }
 };
-*/
+
 
 /*
 array stack(template)
-
+*/
 template<typename T>
 class stack
 {
@@ -86,7 +86,7 @@ public:
         return Top == 0;
     }
 };
-*/
+
 
 
 int main()
