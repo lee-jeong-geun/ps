@@ -1,46 +1,33 @@
 #include <cstdio>
 #include <iostream>
-#include <stack>
 using namespace std;
-int N, P, result;
+int N, Stack[7][300005], Top[15], P, result;
 
-stack<int> s[7];
+/*
+6개 스택을 이용해서 n번줄의 프렛이 들어오면 n번째 스택의 Top과 비교해서
+프렛이 Top에있는 것보다 작으면 Top을 프렛보다 작은게 나올때까지 pop을 해준다.
+프렛이 Top에 있는 것보다 크면 스택에 push해준다.
+*/
 
 int main()
 {
     scanf("%d %d", &N, &P);
-    for(int i = 1; i <= 6; i++)
-    {
-        s[i].push(0);
-    }
     for(int i = 0; i < N; i++)
     {
-        int l, p;
-        scanf("%d %d", &l, &p);
-        if(s[l].top() < p)
+        int line, p;
+        scanf("%d %d", &line, &p);
+        //프렛이 n번째 스택의 Top보다 작으면 프렛보다 작은게 나올때 까지 pop
+        while(Stack[line][Top[line]] > p)
         {
+            Top[line]--;
             result++;
-            s[l].push(p);
         }
-        else if(s[l].top() > p)
+        //프렛이 n번째 스택의 Top보다 크면 push
+        if(Stack[line][Top[line]] < p)
         {
-            while(1)
-            {
-                if(s[l].top() <= p)
-                {
-                    if(s[l].top() < p)
-                    {
-                        result++;
-                        s[l].push(p);
-                    }
-                    break;
-                }
-                else
-                {
-                    result++;
-                    s[l].pop();
-                }
-            }
+            Top[line]++;
+            Stack[line][Top[line]] = p;
+            result++;
         }
     }
     printf("%d", result);
