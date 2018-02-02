@@ -3,6 +3,10 @@
 using namespace std;
 int stick[6];
 
+/*
+버블 정렬 한번 완료 할때마다 출력 해주면 된다.
+*/
+
 int main()
 {
     for(int i = 0; i < 5; i++)
