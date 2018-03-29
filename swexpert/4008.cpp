@@ -5,7 +5,7 @@ using namespace std;
 int N, Number[15], op[5], Max, Min;
 
 /*
-단순 백트래킹
+단순 백트래킹 
 */
 
 void init()
