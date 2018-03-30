@@ -18,7 +18,7 @@ long long result;
 
 /*
 가장 짧은 간선들로만 연결해야 하기 때문에 union-find를 사용했다.
-모든 간선들을 구한 후 간선의 길이로 오름차순 정렬 후 union-find를 이용하면 된다.
+모든 간선들을 구한 후 간선의 길이로 오름차순 정렬 후 union-find를 이용하면 된다. 
 */
 
 int abs(int a)
