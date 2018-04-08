@@ -1,184 +1,130 @@
 #include <cstdio>
 #include <iostream>
+#include <cstring>
+#include <queue>
 using namespace std;
 typedef struct _data
 {
-    int x, y, count;
+	int x, y, Time;
 }Data;
-int N, M, R, C, L, zone[55][55], chk[55][55], result, moving[5][10][10];
-int arrA[4] = {0, 1, 0, -1};
-int arrB[4] = {-1, 0, 1, 0};
+int N, M, zone[55][55], R, C, L, chk[55][55], result, route[5][15][15];
+int arrA[4] = { 0, 1, 0, -1 };
+int arrB[4] = { -1, 0, 1, 0 };
 
-template<typename T>
-class queue
-{
-public:
-    class Node
-    {
-    public:
-        T data;
-        Node *link;
-    };
-    int _size;
-    Node *Front, *Rear;
-    queue()
-    {
-        _size = 0;
-        Front = NULL;
-        Rear = NULL;
-    }
-    void push(T data)
-    {
-        _size++;
-        Node *newnode = new Node();
-        newnode->data = data;
-        newnode->link = NULL;
-        if(_size == 1)
-        {
-            Front = newnode;
-            Rear = newnode;
-        }
-        else
-        {
-            Rear->link = newnode;
-            Rear = newnode;
-        }
-    }
-    void pop()
-    {
-        _size--;
-        Node *tnode;
-        tnode = Front;
-        Front = Front->link;
-        delete tnode;
-    }
-    T front()
-    {
-        return Front->data;
-    }
-    int size()
-    {
-        return _size;
-    }
-    bool empty()
-    {
-        return _size == 0;
-    }
-};
+/*
+단순 BFS문제이다. 각각의 블록들을 이동 시킬수 있는 조건을 찾은 후
+구현 하면 된다.
+*/
 
-void moveinit()
+bool range(int a, int b)
 {
-    int temp1[4] = {1, 2, 5, 6};
-    for(int i = 0; i < 4; i++)
-    {
-        moving[0][1][temp1[i]] = 1;
-        moving[0][2][temp1[i]] = 1;
-        moving[0][4][temp1[i]] = 1;
-        moving[0][7][temp1[i]] = 1;
-    }
-    int temp2[4] = {1, 3, 6, 7};
-    for(int i = 0; i < 4; i++)
-    {
-        moving[1][1][temp2[i]] = 1;
-        moving[1][3][temp2[i]] = 1;
-        moving[1][4][temp2[i]] = 1;
-        moving[1][5][temp2[i]] = 1;
-    }
-    int temp3[4] = {1, 2, 4, 7};
-    for(int i = 0; i < 4; i++)
-    {
-        moving[2][1][temp3[i]] = 1;
-        moving[2][2][temp3[i]] = 1;
-        moving[2][5][temp3[i]] = 1;
-        moving[2][6][temp3[i]] = 1;
-    }
-    int temp4[4] = {1, 3, 4, 5};
-    for(int i = 0; i < 4; i++)
-    {
-        moving[3][1][temp4[i]] = 1;
-        moving[3][3][temp4[i]] = 1;
-        moving[3][6][temp4[i]] = 1;
-        moving[3][7][temp4[i]] = 1;
-    }
+	if (a >= 0 && a < M && b >= 0 && b < N)
+	{
+		return 1;
+	}
+	return 0;
 }
 
-void init()
+void init(int t)
 {
-    result = 1;
-    for(int i = 0; i < 55; i++)
-    {
-        for(int j = 0; j < 55; j++)
-        {
-            chk[i][j] = 0;
-        }
-    }
-}
-
-int range(int a, int b)
-{
-    if(a >= 0 && a < M && b >= 0 && b < N)
-    {
-        return 1;
-    }
-    return 0;
-}
-
-int move(int tx, int ty, int nx, int ny, int dir)
-{
-    return moving[dir][zone[ty][tx]][zone[ny][nx]];
+	memset(chk, 0, sizeof chk);
+	result = 0;
+    //블록 이동 가능 경로
+	if (t == 1)
+	{
+		for (int i = 1; i <= 7; i++)
+		{
+			if (i == 1 || i == 2 || i == 4 || i == 7)
+			{
+				route[0][i][1] = 1;
+				route[0][i][2] = 1;
+				route[0][i][5] = 1;
+				route[0][i][6] = 1;
+			}
+		}
+		for (int i = 1; i <= 7; i++)
+		{
+			if (i == 1 || i == 3 || i == 4 || i == 5)
+			{
+				route[1][i][1] = 1;
+				route[1][i][3] = 1;
+				route[1][i][6] = 1;
+				route[1][i][7] = 1;
+			}
+		}
+		for (int i = 1; i <= 7; i++)
+		{
+			if (i == 1 || i == 2 || i == 5 || i == 6)
+			{
+				route[2][i][1] = 1;
+				route[2][i][2] = 1;
+				route[2][i][4] = 1;
+				route[2][i][7] = 1;
+			}
+		}
+		for (int i = 1; i <= 7; i++)
+		{
+			if (i == 1 || i == 3 || i == 6 || i == 7)
+			{
+				route[3][i][1] = 1;
+				route[3][i][3] = 1;
+				route[3][i][4] = 1;
+				route[3][i][5] = 1;
+			}
+		}
+	}
 }
 
 void BFS()
 {
-    queue<Data>q;
-    Data First;
-    First.x = C;
-    First.y = R;
-    First.count = L - 1;
-    q.push(First);
-    chk[R][C] = 1;
-    while(!q.empty())
-    {
-        Data temp;
-        temp = q.front();
-        q.pop();
-        if(temp.count == 0)
-        {
-            continue;
-        }
-        for(int i = 0; i < 4; i++)
-        {
-            Data next;
-            next.x = temp.x + arrA[i];
-            next.y = temp.y + arrB[i];
-            next.count = temp.count - 1;
-            if(range(next.x, next.y) == 1 && chk[next.y][next.x] == 0 && move(temp.x, temp.y, next.x, next.y, i) == 1)
-            {
-                result++;
-                chk[next.y][next.x] = 1;
-                q.push(next);
-            }
-        }
-    }
+	queue<Data>q;
+	result = 1;
+	chk[R][C] = 1;
+	q.push({ C, R, L});
+	while (!q.empty())
+	{
+		Data temp;
+		temp = q.front();
+		q.pop();
+		if (temp.Time == 1)
+		{
+			continue;
+		}
+		for (int i = 0; i < 4; i++)
+		{
+			Data next;
+			next.x = temp.x + arrA[i];
+			next.y = temp.y + arrB[i];
+			next.Time = temp.Time - 1;
+			if (range(next.x, next.y) == 1 && chk[next.y][next.x] == 0)
+			{
+				if (route[i][zone[temp.y][temp.x]][zone[next.y][next.x]] == 1)
+				{
+					chk[next.y][next.x] = 1;
+					q.push(next);
+					result++;
+				}
+			}
+		}
+	}
 }
 
 int main()
 {
-    moveinit();
-    int T;
-    scanf("%d", &T);
-    for(int testcase = 1; testcase <= T; testcase++)
-    {
-        init();
-        scanf("%d %d %d %d %d", &N, &M, &R, &C, &L);
-        for(int i = 0; i < N; i++)
-        {
-            for(int j = 0; j < M; j++)
-            {
-                scanf("%d", &zone[i][j]);
-            }
-        }
-        BFS();
-        printf("#%d %d\n", testcase, result);
-    }
+	int T;
+	scanf("%d", &T);
+	for (int testcase = 1; testcase <= T; testcase++)
+	{
+		init(testcase);
+		scanf("%d %d %d %d %d", &N, &M, &R, &C, &L);
+		for (int i = 0; i < N; i++)
+		{
+			for (int j = 0; j < M; j++)
+			{
+				scanf("%d", &zone[i][j]);
+			}
+		}
+		BFS();
+		printf("#%d %d\n", testcase, result);
+	}
 }
