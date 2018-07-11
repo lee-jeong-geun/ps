@@ -8,7 +8,7 @@ typedef struct node
     node *blink;
 }Node;
 Node *Head, *Cur;
-int N, K;
+int N, K; 
 
 Node* createNode(int num)
 {
