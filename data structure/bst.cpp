@@ -22,36 +22,29 @@ Node* createNode(int n)
     return newnode;
 }
 
-void insertNode(Node *Cur, Node *newnode)
+Node* insertNode(Node *Cur, Node *newnode)
 {
-    Node *next;
+    if(Cur == 0)
+    {
+        return newnode;
+    }
     if(newnode->num < Cur->num)
     {
-        next = Cur->left;
-        if(next == 0)
-        {
-            Cur->left = newnode;
-            return;
-        }
+        Cur->left = insertNode(Cur->left, newnode);
     }
     else
     {
-        next = Cur->right;
-        if(next == 0)
-        {
-            Cur->right = newnode;
-            return;
-        }
+        Cur->right = insertNode(Cur->right, newnode);
     }
-    insertNode(next, newnode);
+    return Cur;
 }
 
-void deleteNode(Node *parent, Node *Cur, int n)
+Node* deleteNode(Node *Cur, int n)
 {
     int flag = 0;
     if(Cur == 0)
     {
-        return;
+        return Cur;
     }
     if(Cur->num == n)
     {
@@ -69,30 +62,22 @@ void deleteNode(Node *parent, Node *Cur, int n)
         {
             tnode = Cur->right;
         }
-        if(parent->left == Cur)
-        {
-            parent->left = tnode;
-        }
-        else
-        {
-            parent->right = tnode;
-        }
         if(flag == 1)
         {
-            insertNode(Cur->right, tnode->right);
-            tnode->right = Cur->right;
+            tnode->right = insertNode(Cur->right, tnode->right);
         }
         delete Cur;
-        return;
+        return tnode;
     }
     if(n < Cur->num)
     {
-        deleteNode(Cur, Cur->left, n);
+        Cur->left = deleteNode(Cur->left, n);
     }
     else
     {
-        deleteNode(Cur, Cur->right, n);
+        Cur->right = deleteNode(Cur->right, n);
     }
+    return Cur;
 }
 
 int main()
