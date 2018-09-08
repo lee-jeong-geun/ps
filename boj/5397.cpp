@@ -151,3 +151,145 @@ int main()
         printf("\n");
     }
 }
+
+//List
+
+#include <cstdio>
+#include <iostream>
+using namespace std;
+typedef struct node
+{
+    char data;
+    node *flink, *blink;
+    node()
+    {
+        flink = NULL;
+        blink = NULL;
+    }
+}Node;
+Node pool[1000005];
+int poolidx;
+
+Node* alloc()
+{
+    return &pool[poolidx++];
+}
+
+typedef struct nodelist
+{
+    Node *Head, *Tail, *Cur;
+    nodelist()
+    {
+        Head = alloc();
+        Tail = alloc();
+        Head->data = 0;
+        Tail->data = 0;
+        Head->blink = Tail;
+        Tail->flink = Head;
+        Cur = Head;
+    }
+    void insertNode(char data)
+    {
+        Node *newnode = alloc();
+        newnode->data = data;
+        newnode->blink = Cur->blink;
+        newnode->flink = Cur;
+        Cur->blink->flink = newnode;
+        Cur->blink = newnode;
+        Cur = newnode;
+    }
+    void deleteNode()
+    {
+        if(Cur == Head)
+        {
+            return;
+        }
+        Cur->blink->flink = Cur->flink;
+        Cur->flink->blink = Cur->blink;
+        Cur = Cur->flink;
+    }
+    void moveCurLeft()
+    {
+        if(Cur == Head)
+        {
+            return;
+        }
+        Cur = Cur->flink;
+    }
+    void moveCurRight()
+    {
+        if(Cur->blink == Tail)
+        {
+            return;
+        }
+        Cur = Cur->blink;
+    }
+    void printNode()
+    {
+        Node *tnode;
+        tnode = Head->blink;
+        while(tnode != Tail)
+        {
+            printf("%c", tnode->data);
+            tnode = tnode->blink;
+        }
+    }
+    void clear()
+    {
+        poolidx = 0;
+        Head = alloc();
+        Tail = alloc();
+        Head->data = 0;
+        Tail->data = 0;
+        Head->blink = Tail;
+        Tail->flink = Head;
+        Cur = Head;
+    }
+}List;
+List list;
+char L[1000005];
+
+int strlen(char *str)
+{
+    int len = 0;
+    while(*str != 0)
+    {
+        len++;
+        str++;
+    }
+    return len;
+}
+
+int main()
+{
+    int T;
+    scanf("%d", &T);
+    for(int testcase = 0; testcase < T; testcase++)
+    {
+        int Llength;
+        scanf("%s", L);
+        Llength = strlen(L);
+        list.clear();
+        for(int i = 0; i < Llength; i++)
+        {
+            if(L[i] == '<')
+            {
+                list.moveCurLeft();
+            }
+            else if(L[i] == '>')
+            {
+                list.moveCurRight();
+            }
+            else if(L[i] == '-')
+            {
+                list.deleteNode();
+            }
+            else
+            {
+                list.insertNode(L[i]);
+            }
+        }
+        list.printNode();
+        printf("\n");
+    }
+}
