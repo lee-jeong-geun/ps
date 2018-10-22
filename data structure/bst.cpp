@@ -64,7 +64,7 @@ Node* deleteNode(Node *Cur, int n)
         }
         if(flag == 1)
         {
-            tnode->right = insertNode(Cur->right, tnode->right);
+            tnode->right = insertNode(tnode, Cur->right);
         }
         delete Cur;
         return tnode;
