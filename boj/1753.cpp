@@ -8,6 +8,11 @@ typedef pair<int, int> pii;
 vector<pii> vec[20005];
 int V, E, K, dist[20005];
 
+/*
+다익스트라 알고리즘을 이용하여 구한다. 단 정점과 간선의 개수가 20000, 300000이므로
+힙을 쓰지 않는다면 무조건 시간 초과가 나게 되므로 우선순위큐를 이용하여 다익스트라를 구현 하면 된다.
+*/
+
 void BFS()
 {
     priority_queue<pii> pq;
